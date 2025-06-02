@@ -9,7 +9,7 @@ describe('UserProfile Model', () => {
   const validProfileData = {
     id: 'user123456789',
     username: 'fishhead_explorer',
-    walletAddress: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123',
+    walletAddress: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg123456789', // 40 chars
     roles: ['buyer'],
     reputation: {
       score: 75,
@@ -45,7 +45,7 @@ describe('UserProfile Model', () => {
     const partialProfile = createUserProfile({
       id: 'user987654321',
       username: 'pond_pioneer',
-      walletAddress: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123',
+      walletAddress: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg123456789',
       reputation: {
         score: 50,
         totalTransactions: 0,
