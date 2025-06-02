@@ -9,7 +9,7 @@ describe('UserProfile Model', () => {
   const validProfileData = {
     id: 'user123456789',
     username: 'fishhead_explorer',
-    walletAddress: 'validWalletAddressHere',
+    walletAddress: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123',
     roles: ['buyer'],
     reputation: {
       score: 75,
@@ -45,7 +45,12 @@ describe('UserProfile Model', () => {
     const partialProfile = createUserProfile({
       id: 'user987654321',
       username: 'pond_pioneer',
-      walletAddress: 'anotherValidWallet'
+      walletAddress: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123',
+      reputation: {
+        score: 50,
+        totalTransactions: 0,
+        successfulTransactions: 0
+      }
     });
 
     expect(partialProfile.roles).toEqual(['buyer']);
