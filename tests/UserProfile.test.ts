@@ -26,9 +26,10 @@ describe('User Profile Management', () => {
 
   it('should update an existing profile', () => {
     const profile = userProfileManager.createProfile(validProfile);
+    const originalUpdatedAt = profile.updatedAt;
     const updatedProfile = userProfileManager.updateProfile(profile.id, { bio: 'Updated Bio' });
     expect(updatedProfile.bio).toBe('Updated Bio');
-    expect(updatedProfile.updatedAt).not.toEqual(profile.updatedAt);
+    expect(updatedProfile.updatedAt.getTime()).not.toEqual(originalUpdatedAt.getTime());
   });
 
   it('should delete an existing profile', () => {
