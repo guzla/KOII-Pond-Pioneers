@@ -33,11 +33,12 @@ describe('UserProfile Model', () => {
     const invalidProfiles = [
       { ...validProfileData, username: 'a' }, // Too short
       { ...validProfileData, username: 'very_long_username_that_exceeds_maximum_length' }, // Too long
-      { ...validProfileData, username: 'invalid username!' } // Invalid characters
+      { ...validProfileData, username: 'invalid username!' }, // Contains a space and special character
+      { ...validProfileData, username: 'héllo' } // Contains non-ASCII characters
     ];
 
     invalidProfiles.forEach(profile => {
-      expect(validateUserProfile(profile)).toBe(false);
+      expect(validateUserProfile(profile)).toBe(false, `Failed for username: ${profile.username}`);
     });
   });
 
