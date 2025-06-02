@@ -25,8 +25,8 @@ describe('UserProfile Model', () => {
   });
 
   it('should validate a correct user profile', () => {
-    const isValid = validateUserProfile(validProfileData);
-    expect(isValid).toBe(true);
+    const validationResult = validateUserProfile(validProfileData);
+    expect(validationResult.isValid).toBe(true);
   });
 
   it('should reject invalid usernames', () => {
@@ -41,7 +41,10 @@ describe('UserProfile Model', () => {
     ];
 
     invalidProfiles.forEach(profile => {
-      expect(validateUserProfile(profile)).toBe(false, `Validation failed unexpectedly for username: ${profile.username}`);
+      const validationResult = validateUserProfile(profile);
+      expect(validationResult.isValid).toBe(false, 
+        `Validation failed unexpectedly for username: ${profile.username}. Errors: ${JSON.stringify(validationResult.errors)}`
+      );
     });
   });
 
