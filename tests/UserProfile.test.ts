@@ -9,10 +9,10 @@ import {
 
 describe('UserProfile Model', () => {
   const validProfile = {
-    id: 'wallet123456789',
+    id: 'wallet1234567890',
     username: 'johndoe',
     email: 'john@example.com',
-    koiiWalletAddress: 'koiiwallet123456',
+    koiiWalletAddress: 'koiiwallet1234567890',
     role: UserRole.MEMBER,
     status: AccountStatus.ACTIVE,
   };
@@ -23,13 +23,13 @@ describe('UserProfile Model', () => {
 
   it('should create a user profile with defaults', () => {
     const profile = createUserProfile({ 
-      id: 'wallet123', 
-      koiiWalletAddress: 'koiiwallet456' 
+      id: 'wallet1234567890', 
+      koiiWalletAddress: 'koiiwallet1234567890' 
     });
 
     expect(profile.role).toBe(UserRole.MEMBER);
     expect(profile.status).toBe(AccountStatus.ACTIVE);
-    expect(profile.id).toBe('wallet123');
+    expect(profile.id).toBe('wallet1234567890');
   });
 
   it('should reject invalid email', () => {
