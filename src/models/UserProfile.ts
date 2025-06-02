@@ -53,16 +53,20 @@ export function createUserProfile(data: Partial<UserProfile>): UserProfile {
   });
 }
 
-// Validation function with error details
-export function validateUserProfile(profile: unknown): { isValid: boolean, errors?: z.ZodError } {
+// Validation function that returns detailed validation information
+export function validateUserProfile(profile: unknown): { 
+  isValid: boolean, 
+  errors?: string[] 
+} {
   try {
     UserProfileSchema.parse(profile);
     return { isValid: true };
   } catch (error) {
     if (error instanceof z.ZodError) {
+      const errorMessages = error.errors.map(err => err.message);
       return { 
         isValid: false, 
-        errors: error 
+        errors: errorMessages
       };
     }
     return { isValid: false };
