@@ -61,7 +61,12 @@ describe('User Profile Management', () => {
       const profile = createTestProfile();
       const createdProfile = UserProfileManager.createProfile(profile);
       
-      // Small delay to ensure timestamp difference
+      // Simulate a slight delay to ensure timestamp difference
+      const now = Date.now();
+      while (Date.now() === now) {
+        // Busy wait for a minimal time
+      }
+
       const updatedProfile = UserProfileManager.updateProfile(createdProfile.id, {
         username: 'newusername',
         bio: 'Updated test bio'
@@ -69,6 +74,7 @@ describe('User Profile Management', () => {
 
       expect(updatedProfile.username).toBe('newusername');
       expect(updatedProfile.bio).toBe('Updated test bio');
+      expect(updatedProfile.updatedAt).toBeInstanceOf(Date);
       expect(updatedProfile.updatedAt.getTime()).toBeGreaterThan(createdProfile.updatedAt.getTime());
     });
 
