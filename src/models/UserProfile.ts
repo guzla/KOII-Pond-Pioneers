@@ -45,7 +45,7 @@ export const UserProfileSchema = z.object({
     theme: z.enum(['light', 'dark']).default('light'),
     language: z.string().default('en'),
     notifications: z.boolean().default(true)
-  }).optional(),
+  }).default({}),
   
   // Timestamps for account management
   createdAt: z.date().default(() => new Date()),
