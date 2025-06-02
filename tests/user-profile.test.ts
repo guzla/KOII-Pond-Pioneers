@@ -72,7 +72,7 @@ describe('User Profile Management', () => {
 
       expect(updatedProfile.username).toBe('newusername');
       expect(updatedProfile.bio).toBe('Updated test bio');
-      expect(updatedProfile.updatedAt).not.toEqual(createdProfile.updatedAt);
+      expect(updatedProfile.updatedAt.getTime()).toBeGreaterThan(createdProfile.updatedAt.getTime());
     });
 
     it('should throw error when updating with invalid data', () => {

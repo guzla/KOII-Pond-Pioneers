@@ -8,18 +8,19 @@
     "task-node": "node src/task/1-task.js"
   },
   "dependencies": {
+    "@_koii/namespace-wrapper": "latest",
     "@solana/web3.js": "1.87.6",
-    "rpc-websockets": "7.5.1",
     "dotenv": "16.3.1",
     "node-fetch": "3.3.2",
-    "@_koii/namespace-wrapper": "latest",
+    "rpc-websockets": "7.5.1",
+    "uuid": "^11.1.0",
     "web3": "latest",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "typescript": "5.3.3",
     "@types/node": "20.10.5",
     "@types/web3": "latest",
-    "vitest": "^1.2.2"
+    "typescript": "5.3.3",
+    "vitest": "^1.6.1"
   }
 }
