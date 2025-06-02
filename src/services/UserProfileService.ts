@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import Joi from 'joi';
 
 /**
  * Represents a user profile in the Koii Pond Pioneers marketplace
@@ -14,30 +15,79 @@ export interface UserProfile {
 }
 
 /**
- * Service for managing user profiles in a decentralized manner
+ * Service for managing user profiles with validation and authentication
  */
 export class UserProfileService {
   private profiles: Map<string, UserProfile> = new Map();
 
+  // Validation schema for profile creation
+  private createProfileSchema = Joi.object({
+    walletAddress: Joi.string()
+      .pattern(/^(0x)?[0-9a-fA-F]{40}$/)
+      .required()
+      .messages({
+        'string.pattern.base': 'Invalid wallet address format',
+        'any.required': 'Wallet address is required'
+      }),
+    username: Joi.string()
+      .min(3)
+      .max(30)
+      .optional(),
+    email: Joi.string()
+      .email()
+      .optional(),
+    metadata: Joi.object().optional()
+  });
+
+  // Validation schema for profile updates
+  private updateProfileSchema = Joi.object({
+    username: Joi.string()
+      .min(3)
+      .max(30)
+      .optional(),
+    email: Joi.string()
+      .email()
+      .optional(),
+    metadata: Joi.object().optional()
+  });
+
   /**
-   * Create a new user profile
-   * @param walletAddress User's blockchain wallet address
-   * @param username Optional username
-   * @param email Optional email
-   * @returns Created user profile
+   * Authenticate a wallet address
+   * @param walletAddress Wallet address to authenticate
+   * @returns Boolean indicating authentication status
    */
-  createProfile(
-    walletAddress: string, 
-    username?: string, 
-    email?: string
-  ): UserProfile {
-    // Validate wallet address
-    if (!walletAddress || walletAddress.trim() === '') {
-      throw new Error('Wallet address is required');
+  authenticateWallet(walletAddress: string): boolean {
+    // In a real-world scenario, this would involve blockchain signature verification
+    // For this example, we'll do a basic format check
+    const walletRegex = /^(0x)?[0-9a-fA-F]{40}$/;
+    return walletRegex.test(walletAddress);
+  }
+
+  /**
+   * Create a new user profile with validation
+   * @param profileData Profile creation data
+   * @returns Created user profile
+   * @throws ValidationError if data is invalid
+   */
+  createProfile(profileData: {
+    walletAddress: string;
+    username?: string;
+    email?: string;
+    metadata?: Record<string, unknown>;
+  }): UserProfile {
+    // Validate wallet authentication
+    if (!this.authenticateWallet(profileData.walletAddress)) {
+      throw new Error('Wallet authentication failed');
+    }
+
+    // Validate input data
+    const { error } = this.createProfileSchema.validate(profileData);
+    if (error) {
+      throw new Error(`Validation Error: ${error.details[0].message}`);
     }
 
     // Check for existing profile
-    const existingProfile = this.findProfileByWallet(walletAddress);
+    const existingProfile = this.findProfileByWallet(profileData.walletAddress);
     if (existingProfile) {
       throw new Error('Profile already exists for this wallet');
     }
@@ -45,12 +95,12 @@ export class UserProfileService {
     const now = Date.now();
     const newProfile: UserProfile = {
       id: uuidv4(),
-      walletAddress,
-      username: username?.trim(),
-      email: email?.trim(),
+      walletAddress: profileData.walletAddress,
+      username: profileData.username?.trim(),
+      email: profileData.email?.trim(),
       createdAt: now,
       updatedAt: now,
-      metadata: {}
+      metadata: profileData.metadata || {}
     };
 
     this.profiles.set(newProfile.id, newProfile);
@@ -80,6 +130,12 @@ export class UserProfileService {
     const profile = this.profiles.get(id);
     if (!profile) {
       throw new Error('Profile not found');
+    }
+
+    // Validate update data
+    const { error } = this.updateProfileSchema.validate(updates);
+    if (error) {
+      throw new Error(`Validation Error: ${error.details[0].message}`);
     }
 
     const updatedProfile = {
