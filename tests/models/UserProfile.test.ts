@@ -33,8 +33,11 @@ describe('UserProfile Model', () => {
     const invalidProfiles = [
       { ...validProfileData, username: 'a' }, // Too short
       { ...validProfileData, username: 'very_long_username_that_exceeds_maximum_length' }, // Too long
-      { ...validProfileData, username: 'invalid username!' }, // Contains a space and special character
-      { ...validProfileData, username: 'héllo' } // Contains non-ASCII characters
+      { ...validProfileData, username: 'Invalid_Username' }, // Contains uppercase letters
+      { ...validProfileData, username: 'invalid username' }, // Contains a space
+      { ...validProfileData, username: 'invalid-username' }, // Contains a hyphen
+      { ...validProfileData, username: 'héllo' }, // Contains non-ASCII characters
+      { ...validProfileData, username: 'user!' } // Contains special characters
     ];
 
     invalidProfiles.forEach(profile => {
