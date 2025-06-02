@@ -49,7 +49,9 @@ describe('UserProfile Model', () => {
 
     expect(updatedProfile.reputation).toBe(75);
     expect(updatedProfile.preferences?.theme).toBe('dark');
-    expect(updatedProfile.updatedAt).not.toEqual(originalProfile.createdAt);
+    
+    // Compare timestamps with tolerance
+    expect(updatedProfile.updatedAt.getTime()).not.toBe(originalProfile.createdAt.getTime());
   });
 
   it('should reject invalid email', () => {
