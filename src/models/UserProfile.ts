@@ -16,6 +16,8 @@ export const UserProfileSchema = z.object({
   
   // User's public wallet address
   walletAddress: z.string()
+    .min(32, { message: "Wallet address must be at least 32 characters" })
+    .max(64, { message: "Wallet address cannot exceed 64 characters" })
     .regex(/^[1-9A-HJ-NP-Za-km-z]+$/, { message: "Invalid wallet address format" }),
   
   // User's roles/permissions in the marketplace
