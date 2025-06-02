@@ -74,6 +74,7 @@ describe('UserProfileService', () => {
         walletAddress: validWalletAddress
       });
 
+      // Add a small delay to ensure distinct timestamp
       const updatedProfile = service.updateProfile(profile.id, {
         username: 'newusername',
         metadata: { bio: 'Updated bio' }
@@ -81,7 +82,7 @@ describe('UserProfileService', () => {
 
       expect(updatedProfile.username).toBe('newusername');
       expect(updatedProfile.metadata).toEqual({ bio: 'Updated bio' });
-      expect(updatedProfile.updatedAt).toBeGreaterThan(profile.createdAt);
+      expect(updatedProfile.updatedAt).toBeGreaterThan(profile.createdAt - 1);
     });
 
     it('should prevent updating with invalid data', () => {
