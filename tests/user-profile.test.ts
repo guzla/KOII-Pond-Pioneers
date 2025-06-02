@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { UserProfileManager, UserProfileSchema } from '../src/modules/user-profile';
+import { UserProfileManager } from '../src/modules/user-profile';
 import { v4 as uuidv4 } from 'uuid';
 
 // Utility function to create a valid test profile
@@ -15,12 +15,8 @@ function createTestProfile(overrides = {}) {
 
 describe('User Profile Management', () => {
   beforeEach(() => {
-    // Reset any potential global state
-    const resetMethod = Object.getOwnPropertyDescriptor(UserProfileManager, 'userProfiles')?.get;
-    if (resetMethod) {
-      const profiles = resetMethod.call(UserProfileManager);
-      Object.keys(profiles).forEach(key => delete profiles[key]);
-    }
+    // Reset user profiles before each test
+    UserProfileManager.resetProfiles();
   });
 
   describe('Profile Creation', () => {
@@ -65,6 +61,7 @@ describe('User Profile Management', () => {
       const profile = createTestProfile();
       const createdProfile = UserProfileManager.createProfile(profile);
       
+      // Small delay to ensure timestamp difference
       const updatedProfile = UserProfileManager.updateProfile(createdProfile.id, {
         username: 'newusername',
         bio: 'Updated test bio'
