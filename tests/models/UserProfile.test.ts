@@ -36,12 +36,12 @@ describe('UserProfile Model', () => {
       { ...validProfileData, username: 'Invalid_Username' }, // Contains uppercase letters
       { ...validProfileData, username: 'invalid username' }, // Contains a space
       { ...validProfileData, username: 'invalid-username' }, // Contains a hyphen
-      { ...validProfileData, username: 'héllo' }, // Contains non-ASCII characters
+      { ...validProfileData, username: 'héllo_world' }, // Contains non-ASCII characters
       { ...validProfileData, username: 'user!' } // Contains special characters
     ];
 
     invalidProfiles.forEach(profile => {
-      expect(validateUserProfile(profile)).toBe(false, `Failed for username: ${profile.username}`);
+      expect(validateUserProfile(profile)).toBe(false, `Validation failed unexpectedly for username: ${profile.username}`);
     });
   });
 
