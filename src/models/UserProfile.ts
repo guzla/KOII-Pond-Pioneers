@@ -23,9 +23,9 @@ export const UserProfileSchema = z.object({
   
   // User reputation and trust metrics
   reputation: z.object({
-    score: z.number().min(0).max(100).default(50),
-    totalTransactions: z.number().non_negative().default(0),
-    successfulTransactions: z.number().non_negative().default(0)
+    score: z.number().int().min(0).max(100).default(50),
+    totalTransactions: z.number().int().min(0).default(0),
+    successfulTransactions: z.number().int().min(0).default(0)
   }),
   
   // Contact and social information
