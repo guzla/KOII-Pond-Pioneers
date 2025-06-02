@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { v4 as uuidv4 } from 'uuid';
 
 // User Profile Schema with comprehensive validation
 export const UserProfileSchema = z.object({
@@ -33,24 +34,53 @@ export const UserProfileSchema = z.object({
 // Type definition for User Profile
 export type UserProfile = z.infer<typeof UserProfileSchema>;
 
-// In-memory user profile storage (for demonstration)
-const userProfiles: Record<string, UserProfile> = {};
+// In-memory user profile storage with better encapsulation
+class UserProfileStore {
+  private profiles: Record<string, UserProfile> = {};
+
+  add(profile: UserProfile): void {
+    this.profiles[profile.id] = profile;
+  }
+
+  get(id: string): UserProfile | undefined {
+    return this.profiles[id];
+  }
+
+  update(id: string, profile: UserProfile): void {
+    this.profiles[id] = profile;
+  }
+
+  delete(id: string): void {
+    delete this.profiles[id];
+  }
+
+  clear(): void {
+    this.profiles = {};
+  }
+}
 
 export class UserProfileManager {
+  private static userProfiles = new UserProfileStore();
+
   // Create a new user profile
   static createProfile(profileData: Omit<UserProfile, 'registeredAt' | 'updatedAt'>): UserProfile {
     try {
+      // Ensure unique ID
+      const profileId = uuidv4();
+      
       const validatedProfile = UserProfileSchema.parse({
         ...profileData,
+        id: profileId,
         registeredAt: new Date(),
         updatedAt: new Date()
       });
       
-      if (userProfiles[validatedProfile.id]) {
+      // Check for existing profile
+      if (this.userProfiles.get(profileId)) {
         throw new Error('User profile with this ID already exists');
       }
       
-      userProfiles[validatedProfile.id] = validatedProfile;
+      this.userProfiles.add(validatedProfile);
       return validatedProfile;
     } catch (error) {
       throw new Error(`Profile creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -59,7 +89,7 @@ export class UserProfileManager {
 
   // Retrieve a user profile by ID
   static getProfile(userId: string): UserProfile {
-    const profile = userProfiles[userId];
+    const profile = this.userProfiles.get(userId);
     if (!profile) {
       throw new Error('User profile not found');
     }
@@ -77,7 +107,7 @@ export class UserProfileManager {
         updatedAt: new Date()
       });
       
-      userProfiles[userId] = updatedProfile;
+      this.userProfiles.update(userId, updatedProfile);
       return updatedProfile;
     } catch (error) {
       throw new Error(`Profile update failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -86,9 +116,14 @@ export class UserProfileManager {
 
   // Delete a user profile
   static deleteProfile(userId: string): void {
-    if (!userProfiles[userId]) {
+    if (!this.userProfiles.get(userId)) {
       throw new Error('User profile not found');
     }
-    delete userProfiles[userId];
+    this.userProfiles.delete(userId);
+  }
+
+  // Method for testing: Reset user profiles
+  static resetProfiles(): void {
+    this.userProfiles.clear();
   }
 }
