@@ -4,7 +4,7 @@
   "scripts": {
     "start": "node src/task/k2-monitor.js",
     "task": "node src/task/1-task.js",
-    "test": "node src/task/test-task.js",
+    "test": "vitest",
     "task-node": "node src/task/1-task.js"
   },
   "dependencies": {
@@ -18,6 +18,7 @@
   "devDependencies": {
     "typescript": "5.3.3",
     "@types/node": "20.10.5",
-    "@types/web3": "latest"
+    "@types/web3": "latest",
+    "vitest": "^1.2.0"
   }
 }
