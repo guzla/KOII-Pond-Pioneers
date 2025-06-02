@@ -42,8 +42,9 @@ describe('UserProfile Model', () => {
 
     invalidProfiles.forEach(profile => {
       const validationResult = validateUserProfile(profile);
+      console.log(`Errors for ${profile.username}:`, validationResult.errors);
       expect(validationResult.isValid).toBe(false, 
-        `Validation failed unexpectedly for username: ${profile.username}. Errors: ${JSON.stringify(validationResult.errors)}`
+        `Validation failed unexpectedly for username: ${profile.username}`
       );
     });
   });
